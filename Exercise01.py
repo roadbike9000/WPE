@@ -13,14 +13,18 @@ The average (mean) of these numbers
 The largest and smallest numbers you received from the user
 """
 
-# get input until the user enters empty string
+# # get input until the user enters empty string
 list_of_numbers = []
-value = input("Enter a number or press Enter to stop: ")
-while value != "":
+value = input("Enter a number then press Enter to stop: ")
+# if the user does not enter a number to start with, keep prompting
+while not value:
+    value = input("Please enter a number then press Enter to stop: ").strip()
+# with a least one number, loop until an empty string is entered
+while value:
     list_of_numbers.append(int(value))
     smallest_number = min(list_of_numbers)
     largest_number = max(list_of_numbers)
-    value = input("Enter a number or press Enter to stop: ")
+    value = input("Enter a number then press Enter to stop: ").strip()
 total = sum(list_of_numbers)
 mean = total / len(list_of_numbers)
 print("Sum: {}".format(total))
