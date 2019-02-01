@@ -45,20 +45,29 @@ For example:
     No, invalid
 """
 def check_if_valid_isbin(isbin):
+    is_valid = False    # initialize flag to false
     # remove the dash
     isbin_numbers = [int(digit) for digit in isbin if digit.isdigit()]
     # get the last digit as check sum
-    check_sum = isbin_numbers.pop()
-    isbin_numbers_sum = 0
+    check_sum = isbin_numbers[-1]
+    isbin_sum = 0
     # multiply the value of each odd index by 1
     # multiply the value of each even index by 3
-    for index, number in enumerate(isbin_numbers):
-        isbin_numbers_sum += (number * 3 if index % 2 else number)
+    for index, number in enumerate(isbin_numbers[:12]):
+        isbin_sum += (number * 3 if index % 2 else number)
 
-    if ((10 - (isbin_numbers_sum % 10) == check_sum)):
-        print("{} is a valid ISBN".format(isbin))
+    if isbin_sum % 10 == 0:
+        final_digit = 0
     else:
-        print("{} is not a valid ISBN".format(isbin))
+        final_digit = 10 - (isbin_sum % 10)
+
+    if final_digit == check_sum:
+        is_valid = True
+
+    if is_valid:
+        print(f"{isbin} is a valid ISBN")
+    else:
+        print(f"{isbin} is not a valid ISBN")
 
 isbin = ""
 while len(isbin) != 14:
