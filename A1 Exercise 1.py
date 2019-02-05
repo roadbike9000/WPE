@@ -44,36 +44,36 @@ For example:
     Enter an ISBN: 9780262038002
     No, invalid
 """
-def check_if_valid_isbin(isbin):
+def check_if_valid_isbn(isbn):
     is_valid = False    # initialize flag to false
     # remove the dash
-    isbin_numbers = [int(digit) for digit in isbin if digit.isdigit()]
+    isbn_numbers = [int(digit) for digit in isbn if digit.isdigit()]
     # get the last digit as check sum
-    check_sum = isbin_numbers[-1]
-    isbin_sum = 0
+    check_sum = isbn_numbers[-1]
+    isbn_sum = 0
     # multiply the value of each odd index by 1
     # multiply the value of each even index by 3
-    for index, number in enumerate(isbin_numbers[:12]):
-        isbin_sum += (number * 3 if index % 2 else number)
+    for index, number in enumerate(isbn_numbers[:12]):
+        isbn_sum += (number * 3 if index % 2 else number)
 
-    if isbin_sum % 10 == 0:
+    if isbn_sum % 10 == 0:
         final_digit = 0
     else:
-        final_digit = 10 - (isbin_sum % 10)
+        final_digit = 10 - (isbn_sum % 10)
 
     if final_digit == check_sum:
         is_valid = True
 
     if is_valid:
-        print(f"{isbin} is a valid ISBN")
+        print(f"{isbn} is a valid ISBN")
     else:
-        print(f"{isbin} is not a valid ISBN")
+        print(f"{isbn} is not a valid ISBN")
 
-isbin = ""
-while len(isbin) != 14:
-    isbin = input("Enter an ISBN: ").strip()
+isbn = ""
+while len(isbn) != 14:
+    isbn = input("Enter an ISBN: ").strip()
 
-check_if_valid_isbin(isbin)
+check_if_valid_isbn(isbn)
 
 
 
