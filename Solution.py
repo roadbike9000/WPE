@@ -8,21 +8,28 @@ indicate whether the ISBN is valid.
 Second: If we receive too few or too many digits, then we'll raise a TypeError exception.
 """
 
-def validate_isbin(isbin):
+def validate_isbn(isbn):
+    is_valid = False    # flag indicating whether isbn is valid or not. Default is False
     # remove the dash
-    isbin_numbers = [int(digit) for digit in isbin if digit.isdigit()]
+    isbn_numbers = [int(digit) for digit in isbn if digit.isdigit()]
     # get the last digit as check sum
-    check_sum = isbin_numbers.pop()
-    isbin_sum = 0
+    check_sum = isbn_numbers[-1]
+    isbn_sum = 0
     # multiply the value of each odd index by 1
     # multiply the value of each even index by 3
-    for index, number in enumerate(isbin_numbers):
-        isbin_sum += (number * 3 if index % 2 else number)
+    for index, number in enumerate(isbn_numbers[:-12]):
+        isbn_sum += (number * 3 if index % 2 else number)
 
-    if ((10 - (isbin_sum % 10) == check_sum)):
-        print("{} is a valid ISBN".format(isbin))
+    if isbn_sum % 10 == 0:
+        final_digit = 0
     else:
-        print("{} is not a valid ISBN".format(isbin))
+        final_digit = 10 - (isbn_sum % 10)
+
+    # refactor to return "True" or "False"
+    if final_digit == check_sum:
+        is_valid = True
+
+    return is_valid
 
 import pytest
 
