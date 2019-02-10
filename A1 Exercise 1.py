@@ -44,16 +44,18 @@ For example:
     Enter an ISBN: 9780262038002
     No, invalid
 """
-def check_if_valid_isbn(isbn):
+
+
+def check_if_valid_isbn(user_isbn):
     is_valid = False    # initialize flag to false
     # remove the dash
-    isbn_numbers = [int(digit) for digit in isbn if digit.isdigit()]
+    isbn = [int(digit) for digit in user_isbn if digit.isdigit()]
     # get the last digit as check sum
-    check_sum = isbn_numbers[-1]
+    check_sum = isbn[-1]
     isbn_sum = 0
     # multiply the value of each odd index by 1
     # multiply the value of each even index by 3
-    for index, number in enumerate(isbn_numbers[:12]):
+    for index, number in enumerate(isbn[:12]):
         isbn_sum += (number * 3 if index % 2 else number)
 
     if isbn_sum % 10 == 0:
@@ -65,9 +67,10 @@ def check_if_valid_isbn(isbn):
         is_valid = True
 
     if is_valid:
-        print(f"{isbn} is a valid ISBN")
+        print(f"{user_isbn} is a valid ISBN")
     else:
-        print(f"{isbn} is not a valid ISBN")
+        print(f"{user_isbn} is not a valid ISBN")
+
 
 isbn = ""
 while len(isbn) != 14:
