@@ -7,17 +7,24 @@ We'll ignore the non-numeric characters; if 13 numeric characters remain, then w
 indicate whether the ISBN is valid.
 Second: If we receive too few or too many digits, then we'll raise a TypeError exception.
 """
+import pytest
 
-def validate_isbn(isbn):
+
+def validate_isbn(user_isbn):
     is_valid = False    # flag indicating whether isbn is valid or not. Default is False
+
     # remove the dash
-    isbn_numbers = [int(digit) for digit in isbn if digit.isdigit()]
+    isbn = [int(digit) for digit in user_isbn if digit.isdigit()]
+    if len(isbn) != 13:
+        raise TypeError(f'A valid ISBN is 13 digits, not {len(isbn)}')
+
     # get the last digit as check sum
-    check_sum = isbn_numbers[-1]
+    check_sum = isbn[-1]
     isbn_sum = 0
+
     # multiply the value of each odd index by 1
     # multiply the value of each even index by 3
-    for index, number in enumerate(isbn_numbers[:-12]):
+    for index, number in enumerate(isbn[:12]):
         isbn_sum += (number * 3 if index % 2 else number)
 
     if isbn_sum % 10 == 0:
@@ -31,25 +38,28 @@ def validate_isbn(isbn):
 
     return is_valid
 
-import pytest
 
 @pytest.mark.parametrize('isbn', [
     '',
     '12345',
     '123456789012345',
+    '123-456789012',
     ])
 def test_bad_isbn_length(isbn):
     with pytest.raises(TypeError) as e:
         validate_isbn(isbn)
-    assert e.value.args[0].endswith(f', not {len(isbn)}')
+    assert e.value.args[0].startswith(f'A valid ISBN is 13 digits, not')
+
 
 @pytest.mark.parametrize('isbn', [
     '9780143127796',
     '9780415700108',
     '9780525533184',
+    '978-0262038003',
     ])
 def test_good_isbn(isbn):
     assert validate_isbn(isbn)
+
 
 @pytest.mark.parametrize('isbn', [
     '9780143127793',
@@ -57,4 +67,4 @@ def test_good_isbn(isbn):
     '9780525533183',
     ])
 def test_bad_isbn(isbn):
-    assert validate_isbn(isbn) == False
+    assert validate_isbn(isbn) is False
