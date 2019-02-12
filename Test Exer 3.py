@@ -5,9 +5,39 @@ Pytest tests for A1 Exercise 3 solution
 import pytest
 
 
-def check_isbns(filename, *isbns):
-    isbn_data_file = open(filename, 'w')
-    isbn_data_file.close()
+def validate_isbns(filename, *args):
+    with open(filename, 'w') as outfile:
+        for user_isbn in args:
+
+            # check each isbn for non-digit and rebuild the isbn
+            isbn = [int(digit) for digit in user_isbn if digit.isdigit()]
+
+            is_valid = False  # flag indicating whether isbn is valid or not. Default is False
+
+            # if isbn is not 13 digits long log it as bad length
+            if len(isbn) != 13:
+                outfile.write(f'{isbn}\tbad length of {len(isbn)}\n')
+                continue
+
+            # process valid isbn, calculate sum, get final digit to compare with check sum
+            # multiply the value of each odd index by 1
+            # multiply the value of each even index by 3
+            isbn_sum = 0  # store sum of isbn
+            check_sum = isbn[-1]  # last digit of isbn is check sum
+
+            for index, number in enumerate(isbn[:12]):
+                isbn_sum += (number * 3 if index % 2 else number)
+
+            if isbn_sum % 10 == 0:
+                final_digit = 0
+            else:
+                final_digit = 10 - (isbn_sum % 10)
+
+            # refactor to return "True" or "False"
+            if final_digit == check_sum:
+                is_valid = True
+
+            outfile.write(f'{isbn}\t{is_valid}\n')
 
 
 def test_isbn_checker(tmp_path):
@@ -25,7 +55,7 @@ def test_isbn_checker(tmp_path):
                   '9780415700103': 'False',
                   '9780525533183': 'False'}
 
-    check_isbns(filename, test_isbns)
+    validate_isbns(filename, *test_isbns)
 
     for one_line in open(filename):
         print(one_line)
