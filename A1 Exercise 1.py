@@ -44,6 +44,8 @@ For example:
     Enter an ISBN: 9780262038002
     No, invalid
 """
+
+
 def check_if_valid_isbn(isbn):
     is_valid = False    # initialize flag to false
     # remove the dash
